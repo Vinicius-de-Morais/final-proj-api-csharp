@@ -1,0 +1,33 @@
+# Build results
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.csproj.user
+*.pidb
+*.userprefs
+*.vspscc
+
+# Test results
+[Tt]est[Rr]esult*
+
+# NuGet
+packages/
+
+# ReSharper
+_ReSharper*/
+*.resharper
+*.DotSettings.user
+
+# Build and publish artifacts
+publish/
+*.sw*
+
+# Other generated files
+*.log
+*.cache
+
+App.config
