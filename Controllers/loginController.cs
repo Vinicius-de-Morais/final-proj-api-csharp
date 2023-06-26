@@ -7,6 +7,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api_projeto_final.Controllers
 {
@@ -14,6 +15,13 @@ namespace api_projeto_final.Controllers
     [ApiController]
     public class loginController : ControllerBase
     {
+
+        private readonly ILogger<loginController> _logger;
+
+        public loginController(ILogger<loginController> logger)
+        {
+            _logger = logger;
+        }
 
         [HttpPost]
         public async Task<IActionResult> login(
@@ -28,7 +36,10 @@ namespace api_projeto_final.Controllers
 
             user? userFound = findUserByUserName(context, user.username);
             if (userFound == null)
-                throw new InvalidCredentialException("Invalid credentials");
+            {
+                //StatusCode(401);
+                return Unauthorized("Invalid Credentials");
+            }
 
             authService auth = new authService();
 
@@ -54,6 +65,7 @@ namespace api_projeto_final.Controllers
             claims.Add(new Claim("token", token.token_value));
             var identity = new ClaimsIdentity(claims, "cookie");
             var userlog = new ClaimsPrincipal(identity);
+
             await HttpContext.SignInAsync("cookie", userlog);
         }
 
@@ -62,22 +74,17 @@ namespace api_projeto_final.Controllers
             return context.users.AsNoTracking().FirstOrDefault(user => user.username == username);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> validateCookie(
 
-        )
+        [AllowAnonymous]
+        [HttpGet("teste")]
+        public IActionResult AccessDenied(string returnUrl = null)
         {
+            // Log the error
+            _logger.LogWarning("Access denied. ReturnUrl: {ReturnUrl}", returnUrl);
 
-            try
-            {
-                
+            // You can add additional custom logic here to handle unauthenticated requests
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error to logon: " + ex.Message);
-            }
+            return Unauthorized("Access denied. ReturnUrl:" + returnUrl);
         }
 
     }

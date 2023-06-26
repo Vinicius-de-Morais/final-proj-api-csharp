@@ -9,6 +9,7 @@ using api_projeto_final;
 using api_projeto_final.DataModels;
 using api_projeto_final.Service;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace api_projeto_final.Controllers
 {

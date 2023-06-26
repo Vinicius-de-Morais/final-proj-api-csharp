@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api_projeto_final;
@@ -11,9 +12,11 @@ using api_projeto_final;
 namespace api_projeto_final.Migrations
 {
     [DbContext(typeof(DbConnect))]
-    partial class DbConnectModelSnapshot : ModelSnapshot
+    [Migration("20230625193830_ModifiRelationship3")]
+    partial class ModifiRelationship3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,7 +293,7 @@ namespace api_projeto_final.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CadAbilityScoreId")
+                    b.Property<int>("CadAbilityScoreId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("RaceId")
@@ -346,12 +349,12 @@ namespace api_projeto_final.Migrations
                     b.Property<DateTimeOffset>("created_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 20, 5, 52, 406, DateTimeKind.Unspecified).AddTicks(7767), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 19, 38, 29, 872, DateTimeKind.Unspecified).AddTicks(9636), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<DateTimeOffset>("expires_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 26, 0, 5, 52, 406, DateTimeKind.Unspecified).AddTicks(8630), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 23, 38, 29, 873, DateTimeKind.Unspecified).AddTicks(647), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("token_value")
                         .IsRequired()
@@ -471,7 +474,7 @@ namespace api_projeto_final.Migrations
                     b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadAbilityScore")
                         .WithMany("ClassModifiers")
                         .HasForeignKey("CadAbilityScoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("api_projeto_final.DataModels.Class", "Class")
@@ -500,7 +503,9 @@ namespace api_projeto_final.Migrations
                 {
                     b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadAbilityScore")
                         .WithMany("RaceModifiers")
-                        .HasForeignKey("CadAbilityScoreId");
+                        .HasForeignKey("CadAbilityScoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("api_projeto_final.DataModels.Race", "Race")
                         .WithMany("RaceModifiers")

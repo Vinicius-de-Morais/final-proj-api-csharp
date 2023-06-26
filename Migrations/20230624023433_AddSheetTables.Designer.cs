@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api_projeto_final;
@@ -11,9 +12,11 @@ using api_projeto_final;
 namespace api_projeto_final.Migrations
 {
     [DbContext(typeof(DbConnect))]
-    partial class DbConnectModelSnapshot : ModelSnapshot
+    [Migration("20230624023433_AddSheetTables")]
+    partial class AddSheetTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,16 +227,13 @@ namespace api_projeto_final.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CadAbilityScoreId");
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("ClassesModifiers");
+                    b.ToTable("ClassModifiers");
                 });
 
             modelBuilder.Entity("api_projeto_final.DataModels.Equipment", b =>
@@ -282,32 +282,6 @@ namespace api_projeto_final.Migrations
                     b.ToTable("Races");
                 });
 
-            modelBuilder.Entity("api_projeto_final.DataModels.RaceModifiers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CadAbilityScoreId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("RaceId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CadAbilityScoreId");
-
-                    b.HasIndex("RaceId");
-
-                    b.ToTable("RacesModifiers");
-                });
-
             modelBuilder.Entity("api_projeto_final.DataModels.auth", b =>
                 {
                     b.Property<int>("id")
@@ -346,12 +320,12 @@ namespace api_projeto_final.Migrations
                     b.Property<DateTimeOffset>("created_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 20, 5, 52, 406, DateTimeKind.Unspecified).AddTicks(7767), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 24, 2, 34, 33, 336, DateTimeKind.Unspecified).AddTicks(9492), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<DateTimeOffset>("expires_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 26, 0, 5, 52, 406, DateTimeKind.Unspecified).AddTicks(8630), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 24, 6, 34, 33, 337, DateTimeKind.Unspecified).AddTicks(968), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("token_value")
                         .IsRequired()
@@ -469,7 +443,7 @@ namespace api_projeto_final.Migrations
             modelBuilder.Entity("api_projeto_final.DataModels.ClassModifiers", b =>
                 {
                     b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadAbilityScore")
-                        .WithMany("ClassModifiers")
+                        .WithMany()
                         .HasForeignKey("CadAbilityScoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -496,22 +470,6 @@ namespace api_projeto_final.Migrations
                     b.Navigation("Character");
                 });
 
-            modelBuilder.Entity("api_projeto_final.DataModels.RaceModifiers", b =>
-                {
-                    b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadAbilityScore")
-                        .WithMany("RaceModifiers")
-                        .HasForeignKey("CadAbilityScoreId");
-
-                    b.HasOne("api_projeto_final.DataModels.Race", "Race")
-                        .WithMany("RaceModifiers")
-                        .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("CadAbilityScore");
-
-                    b.Navigation("Race");
-                });
-
             modelBuilder.Entity("api_projeto_final.DataModels.auth", b =>
                 {
                     b.HasOne("api_projeto_final.DataModels.user", "user")
@@ -534,13 +492,6 @@ namespace api_projeto_final.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("api_projeto_final.DataModels.CadAbilityScore", b =>
-                {
-                    b.Navigation("ClassModifiers");
-
-                    b.Navigation("RaceModifiers");
-                });
-
             modelBuilder.Entity("api_projeto_final.DataModels.Character", b =>
                 {
                     b.Navigation("AbilityScore");
@@ -555,11 +506,6 @@ namespace api_projeto_final.Migrations
             modelBuilder.Entity("api_projeto_final.DataModels.Class", b =>
                 {
                     b.Navigation("ClassModifiers");
-                });
-
-            modelBuilder.Entity("api_projeto_final.DataModels.Race", b =>
-                {
-                    b.Navigation("RaceModifiers");
                 });
 
             modelBuilder.Entity("api_projeto_final.DataModels.user", b =>

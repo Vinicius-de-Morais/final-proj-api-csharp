@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api_projeto_final;
@@ -11,9 +12,11 @@ using api_projeto_final;
 namespace api_projeto_final.Migrations
 {
     [DbContext(typeof(DbConnect))]
-    partial class DbConnectModelSnapshot : ModelSnapshot
+    [Migration("20230625164434_ModifiRelationship")]
+    partial class ModifiRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,10 +293,10 @@ namespace api_projeto_final.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CadAbilityScoreId")
+                    b.Property<int>("CadAbilityScoreId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RaceId")
+                    b.Property<int>("RaceId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Value")
@@ -346,12 +349,12 @@ namespace api_projeto_final.Migrations
                     b.Property<DateTimeOffset>("created_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 20, 5, 52, 406, DateTimeKind.Unspecified).AddTicks(7767), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 16, 44, 34, 202, DateTimeKind.Unspecified).AddTicks(7680), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<DateTimeOffset>("expires_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 26, 0, 5, 52, 406, DateTimeKind.Unspecified).AddTicks(8630), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 25, 20, 44, 34, 202, DateTimeKind.Unspecified).AddTicks(8535), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("token_value")
                         .IsRequired()
@@ -469,7 +472,7 @@ namespace api_projeto_final.Migrations
             modelBuilder.Entity("api_projeto_final.DataModels.ClassModifiers", b =>
                 {
                     b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadAbilityScore")
-                        .WithMany("ClassModifiers")
+                        .WithMany()
                         .HasForeignKey("CadAbilityScoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -499,13 +502,16 @@ namespace api_projeto_final.Migrations
             modelBuilder.Entity("api_projeto_final.DataModels.RaceModifiers", b =>
                 {
                     b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadAbilityScore")
-                        .WithMany("RaceModifiers")
-                        .HasForeignKey("CadAbilityScoreId");
+                        .WithMany()
+                        .HasForeignKey("CadAbilityScoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("api_projeto_final.DataModels.Race", "Race")
                         .WithMany("RaceModifiers")
                         .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CadAbilityScore");
 
@@ -532,13 +538,6 @@ namespace api_projeto_final.Migrations
                         .IsRequired();
 
                     b.Navigation("user");
-                });
-
-            modelBuilder.Entity("api_projeto_final.DataModels.CadAbilityScore", b =>
-                {
-                    b.Navigation("ClassModifiers");
-
-                    b.Navigation("RaceModifiers");
                 });
 
             modelBuilder.Entity("api_projeto_final.DataModels.Character", b =>
