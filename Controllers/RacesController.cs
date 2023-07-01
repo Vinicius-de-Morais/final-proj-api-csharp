@@ -36,11 +36,11 @@ namespace api_projeto_final.Controllers
             {
                 race.RaceModifiers = await _context.RacesModifiers
                     .Where(rm => rm.RaceId == race.Id)
-                    .Join(_context.CadAbilityScore, 
+                    /*.Join(_context.CadAbilityScore, 
                         cd => cd.Id, 
                         rm => rm.Id, 
                         (rm, cd) => new RaceModifiers {
-                            Id= rm.Id,
+                            Id= rm.Id,v
                             RaceId= rm.RaceId,
                             //race= null,
                             CadAbilityScoreId= cd.Id,
@@ -48,8 +48,13 @@ namespace api_projeto_final.Controllers
                                 Name= cd.Name
                             },
                             Value = rm.Value
-                        })
-                    .ToListAsync();
+                        })*/
+                    .AsNoTracking().ToListAsync();
+
+                foreach(RaceModifiers raceMd in race.RaceModifiers)
+                {
+                    raceMd.CadAbilityScore = _context.CadAbilityScore.AsNoTracking().Where(cd => cd.Id == raceMd.CadAbilityScoreId).First();
+                }
             }
 
 
@@ -83,7 +88,11 @@ namespace api_projeto_final.Controllers
             {
                 return BadRequest();
             }
+            foreach(RaceModifiers raceMd in race.RaceModifiers)
+            {
+                _context.Entry(raceMd).State = EntityState.Modified;
 
+            }
             _context.Entry(race).State = EntityState.Modified;
 
             try

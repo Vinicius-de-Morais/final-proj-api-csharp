@@ -2,6 +2,7 @@ using api_projeto_final.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
 
@@ -34,7 +35,7 @@ namespace api_projeto_final
            );
 
             // Add services to the container.
-
+            
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             ;
@@ -42,8 +43,9 @@ namespace api_projeto_final
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddDbContext<DbConnect>();
-
+            //builder.Services.AddDbContext<DbConnect>();
+            builder.Services.AddDbContext<DbConnect>(ServiceLifetime.Scoped);
+            
             // add some configurations to save the cookies on browser
             builder.Services.Configure<CookiePolicyOptions>(options =>
             {

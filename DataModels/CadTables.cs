@@ -25,12 +25,12 @@ namespace api_projeto_final.DataModels
     {
         [Key]
         public int Id { get; set; }
-        public int ClassId { get; set; }
+        public int? ClassId { get; set; }
         [ForeignKey("ClassId")]
-        public Class Class { get; set; }
-        public int CadAbilityScoreId { get; set; }
+        public Class? Class { get; set; }
+        public int? CadAbilityScoreId { get; set; }
         [ForeignKey("CadAbilityScoreId")]
-        public CadAbilityScore CadAbilityScore { get; set; }
+        public CadAbilityScore? CadAbilityScore { get; set; }
 
         public int Value { get; set; }
     }
@@ -50,11 +50,12 @@ namespace api_projeto_final.DataModels
 
     public class CadAbilityScore
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-
-/*        public List<ClassModifiers>? ClassModifiers { get; set; }
-        public List<RaceModifiers>? RaceModifiers { get; set; }*/
+        public List<CharacterAbilityScore>? CharacterAbilityScore { get; set; }
+        public List<ClassModifiers>? ClassModifiers { get; set; }
+        public List<RaceModifiers>? RaceModifiers { get; set; }
     }
 
     public class CadSkill

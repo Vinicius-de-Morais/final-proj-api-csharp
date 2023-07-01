@@ -29,7 +29,14 @@ namespace api_projeto_final.Controllers
           {
               return NotFound();
           }
-            return await _context.Characters.ToListAsync();
+
+           
+            List<Character> characterList = await _context.Characters
+                .Include(c => c.Race)
+                .Include(c => c.Class)
+                .ToListAsync();
+
+            return Ok(characterList);
         }
 
         // GET: api/Characters/5
@@ -40,7 +47,17 @@ namespace api_projeto_final.Controllers
           {
               return NotFound();
           }
-            var character = await _context.Characters.FindAsync(id);
+            var character = await _context.Characters
+                .Include(c => c.Race)
+                .Include(c => c.Class)
+                .Include(c => c.AbilityScore)
+                    .ThenInclude(cas => cas.CadAbilityScore)
+                .Include(c => c.Skills)
+                    .ThenInclude(cs => cs.CadSkill)
+                .Include(c => c.Spells)
+                    .ThenInclude(css => css.CadSpell)
+                .Include(c => c.Equipment)
+                .FirstOrDefaultAsync(c => c.Id == id); ;
 
             if (character == null)
             {
@@ -58,6 +75,12 @@ namespace api_projeto_final.Controllers
             if (id != character.Id)
             {
                 return BadRequest();
+            }
+
+            foreach (CharacterAbilityScore abilityScore in character.AbilityScore)
+            {
+                abilityScore.CharacterId = character.Id;
+                _context.Entry(abilityScore).State = EntityState.Modified;
             }
 
             _context.Entry(character).State = EntityState.Modified;
@@ -90,7 +113,72 @@ namespace api_projeto_final.Controllers
           {
               return Problem("Entity set 'DbConnect.Characters'  is null.");
           }
-            _context.Characters.Add(character);
+            
+
+            if (character.Skills != null)
+            {
+                foreach(CharacterSkill skill in character.Skills)
+                {
+                    skill.Character = character;
+                    //_context.CharacterSkills.Add(skill);
+                }
+
+            }
+
+          if(character.Spells != null)
+            {
+
+                foreach (CharacterSpell spell in character.Spells)
+                {
+                    spell.Character = character;
+                   // _context.CharacterSpells.Add(spell);
+                }
+            }
+           if(character.Equipment != null)
+            {
+
+                foreach (Equipment equipment in character.Equipment)
+                {
+                    equipment.Character = character;
+                    //_context.Equipment.Add(equipment);
+                }
+            }
+
+            List<CadAbilityScore> cadAbilityScores = _context.CadAbilityScore.AsNoTracking().ToList();
+            List<ClassModifiers> classModifiers = _context.ClassesModifiers.AsNoTracking().Where(cm => cm.ClassId == character.ClassId).ToList();
+            List<RaceModifiers> raceModifiers = _context.RacesModifiers.AsNoTracking().Where(rm => rm.RaceId == character.RaceId).ToList();
+
+            // setar os valores da classe
+            List<CharacterAbilityScore> abilities = new List<CharacterAbilityScore>();
+            foreach (CadAbilityScore cadAbilityScore in cadAbilityScores)
+            {
+                CharacterAbilityScore tempAbility = new CharacterAbilityScore();
+                tempAbility.Character = character;
+                tempAbility.CadAbilityScoreId = cadAbilityScore.Id;
+                tempAbility.Value = 0;
+
+                foreach (ClassModifiers classModifier in classModifiers)
+                {
+                    if (classModifier.CadAbilityScoreId == cadAbilityScore.Id)
+                    {
+                        tempAbility.Value += classModifier.Value;
+                        break;
+                    }
+                }
+
+                foreach (RaceModifiers raceModifier in raceModifiers)
+                {
+                    if (raceModifier.CadAbilityScoreId == cadAbilityScore.Id)
+                    {
+                        tempAbility.Value += raceModifier.Value;
+                        break;
+                    }
+                }
+                _context.CharacterAbilityScores.Add(tempAbility);
+            }
+            //character.AbilityScore = abilities;
+
+            await _context.Characters.AddAsync(character);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCharacter", new { id = character.Id }, character);

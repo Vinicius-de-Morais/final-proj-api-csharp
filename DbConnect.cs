@@ -35,8 +35,7 @@ namespace api_projeto_final
                 retorno = settings.ConnectionString;
             }
             optionsBuilder.UseNpgsql(retorno);
-
-
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -82,7 +81,7 @@ namespace api_projeto_final
 
             modelBuilder.Entity<CharacterAbilityScore>()
                 .HasOne(cas => cas.CadAbilityScore)
-                .WithMany()
+                .WithMany(ca => ca.CharacterAbilityScore)
                 .HasForeignKey(cas => cas.CadAbilityScoreId);
 
             modelBuilder.Entity<CharacterSkill>()
@@ -110,6 +109,18 @@ namespace api_projeto_final
                 .WithMany(c => c.Equipment)
                 .HasForeignKey(e => e.CharacterId);
 
+            modelBuilder.Entity<CadAbilityScore>()
+                .HasMany(cad => cad.RaceModifiers)
+                .WithOne(rm => rm.CadAbilityScore)
+                .HasForeignKey(rm => rm.CadAbilityScoreId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CadAbilityScore>()
+                .HasMany(cad => cad.ClassModifiers)
+                .WithOne(cm => cm.CadAbilityScore)
+                .HasForeignKey(cm => cm.CadAbilityScoreId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 /*            modelBuilder.Entity<Class>()
                 .HasMany(c => c.ClassModifiers)
                 .WithOne(cm => cm.Class)
@@ -131,7 +142,7 @@ namespace api_projeto_final
                 .HasForeignKey(rm => rm.RaceId);*/
 
             // coisas do cad
-                
+
         }
 
         /*public DbSet<api_projeto_final.DataModels.CadAbilityScore>? CadAbilityScore { get; set; }*/

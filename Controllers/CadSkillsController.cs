@@ -29,7 +29,7 @@ namespace api_projeto_final.Controllers
           {
               return NotFound();
           }
-            return await _context.CadSkill.ToListAsync();
+            return await _context.CadSkill.AsNoTracking().ToListAsync();
         }
 
         // GET: api/CadSkills/5

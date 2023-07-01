@@ -87,6 +87,7 @@ namespace api_projeto_final.Controllers
         // POST: api/users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<user>> Postuser(
             [FromServices] DbConnect context,
             [FromBody] user user)

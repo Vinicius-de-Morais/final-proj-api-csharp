@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api_projeto_final;
@@ -11,9 +12,11 @@ using api_projeto_final;
 namespace api_projeto_final.Migrations
 {
     [DbContext(typeof(DbConnect))]
-    partial class DbConnectModelSnapshot : ModelSnapshot
+    [Migration("20230629000309_UpdateCharacterAbilityScore")]
+    partial class UpdateCharacterAbilityScore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,10 +101,6 @@ namespace api_projeto_final.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("varchar(256)");
 
                     b.Property<int>("RaceId")
                         .HasColumnType("integer");
@@ -355,12 +354,12 @@ namespace api_projeto_final.Migrations
                     b.Property<DateTimeOffset>("created_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 30, 21, 58, 33, 534, DateTimeKind.Unspecified).AddTicks(6417), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 29, 0, 3, 9, 456, DateTimeKind.Unspecified).AddTicks(363), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<DateTimeOffset>("expires_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 7, 1, 1, 58, 33, 534, DateTimeKind.Unspecified).AddTicks(8627), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 6, 29, 4, 3, 9, 456, DateTimeKind.Unspecified).AddTicks(1247), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("token_value")
                         .IsRequired()
@@ -443,7 +442,7 @@ namespace api_projeto_final.Migrations
 
             modelBuilder.Entity("api_projeto_final.DataModels.CharacterSkill", b =>
                 {
-                    b.HasOne("api_projeto_final.DataModels.CadSkill", "CadSkill")
+                    b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadSkill")
                         .WithMany()
                         .HasForeignKey("CadSkillId");
 
@@ -458,7 +457,7 @@ namespace api_projeto_final.Migrations
 
             modelBuilder.Entity("api_projeto_final.DataModels.CharacterSpell", b =>
                 {
-                    b.HasOne("api_projeto_final.DataModels.CadSpell", "CadSpell")
+                    b.HasOne("api_projeto_final.DataModels.CadAbilityScore", "CadSpell")
                         .WithMany()
                         .HasForeignKey("CadSpellId");
 

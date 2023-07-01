@@ -29,7 +29,7 @@ namespace api_projeto_final.Controllers
           {
               return NotFound();
           }
-            return await _context.CadAbilityScore.ToListAsync();
+            return await _context.CadAbilityScore.AsNoTracking().ToListAsync();
         }
 
         // GET: api/CadAbilityScores/5
