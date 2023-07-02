@@ -74,15 +74,28 @@ namespace api_projeto_final
                 .WithMany()
                 .HasForeignKey(c => c.ClassId);
 
+            modelBuilder.Entity<Character>()
+                .HasMany(cr => cr.Skills)
+                .WithOne(cs => cs.Character)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Character>()
+                .HasMany(cr => cr.Spells)
+                .WithOne(cp => cp.Character)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<CharacterAbilityScore>()
                 .HasOne(cas => cas.Character)
                 .WithMany(c => c.AbilityScore)
-                .HasForeignKey(cas => cas.CharacterId);
+                .HasForeignKey(cas => cas.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CharacterAbilityScore>()
                 .HasOne(cas => cas.CadAbilityScore)
                 .WithMany(ca => ca.CharacterAbilityScore)
-                .HasForeignKey(cas => cas.CadAbilityScoreId);
+                .HasForeignKey(cas => cas.CadAbilityScoreId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<CharacterSkill>()
                 .HasOne(cs => cs.Character)
@@ -107,39 +120,51 @@ namespace api_projeto_final
             modelBuilder.Entity<Equipment>()
                 .HasOne(e => e.Character)
                 .WithMany(c => c.Equipment)
-                .HasForeignKey(e => e.CharacterId);
+                .HasForeignKey(e => e.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<CadAbilityScore>()
                 .HasMany(cad => cad.RaceModifiers)
                 .WithOne(rm => rm.CadAbilityScore)
                 .HasForeignKey(rm => rm.CadAbilityScoreId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CadAbilityScore>()
                 .HasMany(cad => cad.ClassModifiers)
                 .WithOne(cm => cm.CadAbilityScore)
                 .HasForeignKey(cm => cm.CadAbilityScoreId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-/*            modelBuilder.Entity<Class>()
-                .HasMany(c => c.ClassModifiers)
-                .WithOne(cm => cm.Class)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ClassModifiers>()
-                .HasOne(cm => cm.Class)
-                .WithMany(c => c.ClassModifiers)
-                .HasForeignKey(cm => cm.ClassId);
-
-            modelBuilder.Entity<Race>()
-                .HasMany(r => r.RaceModifiers)
-                .WithOne(rm => rm.Race)
+            modelBuilder.Entity<CadSkill>()
+                .HasMany(cad => cad.characterSkills)
+                .WithOne(ck => ck.CadSkill)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<RaceModifiers>()
-                .HasOne(rm => rm.Race)
-                .WithMany(r => r.RaceModifiers)
-                .HasForeignKey(rm => rm.RaceId);*/
+            modelBuilder.Entity<CadSpell>()
+                .HasMany(cad => cad.characterSpells)
+                .WithOne(cS => cS.CadSpell)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            /*            modelBuilder.Entity<Class>()
+                            .HasMany(c => c.ClassModifiers)
+                            .WithOne(cm => cm.Class)
+                            .OnDelete(DeleteBehavior.Cascade);
+
+                        modelBuilder.Entity<ClassModifiers>()
+                            .HasOne(cm => cm.Class)
+                            .WithMany(c => c.ClassModifiers)
+                            .HasForeignKey(cm => cm.ClassId);
+
+                        modelBuilder.Entity<Race>()
+                            .HasMany(r => r.RaceModifiers)
+                            .WithOne(rm => rm.Race)
+                            .OnDelete(DeleteBehavior.Cascade);
+
+                        modelBuilder.Entity<RaceModifiers>()
+                            .HasOne(rm => rm.Race)
+                            .WithMany(r => r.RaceModifiers)
+                            .HasForeignKey(rm => rm.RaceId);*/
 
             // coisas do cad
 

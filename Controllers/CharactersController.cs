@@ -39,6 +39,22 @@ namespace api_projeto_final.Controllers
             return Ok(characterList);
         }
 
+        [HttpGet("/api/Characters/user/{id}")]
+        public async Task<ActionResult<IEnumerable<Character>>> GetCharactersByUser(int id)
+        {
+            if (_context.Characters == null)
+            {
+                return NotFound();
+            }
+
+            List<Character> characterList = await _context.Characters.Where(c => c.UserId == id)
+                .Include(c => c.Race)
+                .Include(c => c.Class)
+                .ToListAsync();
+
+            return Ok(characterList);
+        }
+
         // GET: api/Characters/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Character>> GetCharacter(int id)
