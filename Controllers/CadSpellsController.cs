@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api_projeto_final;
 using api_projeto_final.DataModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api_projeto_final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "login_token")]
     public class CadSpellsController : ControllerBase
     {
         private readonly DbConnect _context;

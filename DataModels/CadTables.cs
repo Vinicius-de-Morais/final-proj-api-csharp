@@ -65,7 +65,7 @@ namespace api_projeto_final.DataModels
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<CharacterSkill> characterSkills { get; set; }
+        public List<CharacterSkill>? characterSkills { get; set; }
     }
 
     public class CadSpell
@@ -75,7 +75,7 @@ namespace api_projeto_final.DataModels
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<CharacterSpell> characterSpells { get; set; }
+        public List<CharacterSpell>? characterSpells { get; set; }
 
     }
 }

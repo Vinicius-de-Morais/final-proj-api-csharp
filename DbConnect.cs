@@ -146,25 +146,25 @@ namespace api_projeto_final
                 .WithOne(cS => cS.CadSpell)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            /*            modelBuilder.Entity<Class>()
-                            .HasMany(c => c.ClassModifiers)
-                            .WithOne(cm => cm.Class)
-                            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Class>()
+                .HasMany(c => c.ClassModifiers)
+                .WithOne(cm => cm.Class)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                        modelBuilder.Entity<ClassModifiers>()
-                            .HasOne(cm => cm.Class)
-                            .WithMany(c => c.ClassModifiers)
-                            .HasForeignKey(cm => cm.ClassId);
+            modelBuilder.Entity<ClassModifiers>()
+                .HasOne(cm => cm.Class)
+                .WithMany(c => c.ClassModifiers)
+                .HasForeignKey(cm => cm.ClassId);
 
-                        modelBuilder.Entity<Race>()
-                            .HasMany(r => r.RaceModifiers)
-                            .WithOne(rm => rm.Race)
-                            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Race>()
+                .HasMany(r => r.RaceModifiers)
+                .WithOne(rm => rm.Race)
+                .OnDelete(DeleteBehavior.Cascade);
 
-                        modelBuilder.Entity<RaceModifiers>()
-                            .HasOne(rm => rm.Race)
-                            .WithMany(r => r.RaceModifiers)
-                            .HasForeignKey(rm => rm.RaceId);*/
+            modelBuilder.Entity<RaceModifiers>()
+                .HasOne(rm => rm.Race)
+                .WithMany(r => r.RaceModifiers)
+                .HasForeignKey(rm => rm.RaceId);
 
             // coisas do cad
 
